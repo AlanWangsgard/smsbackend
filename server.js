@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const mongodb = require("./databases/connect")
+const bodyparser = require("body-parser")
 // const fileUpload = require('express-fileupload');
 const cors = require('cors')
 // const fs = require('fs');
@@ -9,6 +11,8 @@ const port = 3000
 app.use(cors({
   origin: '*'
 }))
+
+app.use(bodyparser.json())
 
 app.use('/', require('./routes'));
 
@@ -47,6 +51,11 @@ app.get('/', (req, res) => {
 //     res.sendStatus(200);
 // })
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+mongodb.initDb((err, mongodb) => {
+	if (err) {
+		console.log(err)
+	} else {
+		app.listen(port)
+		console.log(`Connected to DB and listening on ${port}`)
+	}
 })
