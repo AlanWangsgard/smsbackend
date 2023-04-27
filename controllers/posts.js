@@ -10,13 +10,18 @@ const getAll = async (req, res) => {
 	})
 }
 
+const getMultiple = async (req, res) => {
+    req.params.userName
+	const result = await mongodb.getDb().db().collection("posts").find({user: req.params.userName})
+	result.toArray().then((lists) => {
+		res.setHeader("Content-Type", "application/json")
+		res.status(200).json(lists)
+	})
+}
+
 const getSingle = async (req, res) => {
-	const userId = new ObjectId(req.params.id)
-	const result = await mongodb
-		.getDb()
-		.db()
-		.collection("posts")
-		.find({ _id: userId })
+	const userName = req.params.userName
+	const result = await mongodb.getDb().db().collection("posts").find({user: "joe"})
 	result.toArray().then((lists) => {
 		res.setHeader("Content-Type", "application/json")
 		res.status(200).json(lists[0])
@@ -32,7 +37,7 @@ const addpost =async(req, res) =>{
 
 	const post = {
 		text: req.body.text,
-        user: req.body.text,
+        user: req.body.user,
         date: currentDate
 	  };
 	  const response = await mongodb.getDb().db().collection('posts').insertOne(post);
@@ -80,4 +85,4 @@ const deletepost =async(req, res) => {
   };
 
 
-module.exports = {getAll, getSingle, addpost, deletepost, updatepost}
+module.exports = {getAll, getSingle, getMultiple, addpost, deletepost, updatepost}

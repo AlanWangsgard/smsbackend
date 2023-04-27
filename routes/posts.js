@@ -5,6 +5,10 @@ const fs = require('fs');
 
 routes.use(fileUpload());
 
+routes.get('/', controller.getAll)
+
+routes.get('/:userName', controller.getAlljoe)
+
 routes.post('/', controller.addpost)
 
 routes.post('/image', (req, res) =>{

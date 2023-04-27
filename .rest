@@ -2,6 +2,6 @@ POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
-    "text": "this is some text",
+    "text": "this is some more more text",
     "user": "joe"
 }
