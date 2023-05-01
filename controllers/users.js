@@ -1,0 +1,81 @@
+const mongodb = require("../databases/connect")
+const ObjectId = require("mongodb").ObjectId
+// const {validationResult} = require("express-validator")
+
+const getAll = async (req, res) => {
+	const result = await mongodb.getDb().db().collection("Users").find()
+	result.toArray().then((lists) => {
+		res.setHeader("Content-Type", "application/json")
+		res.status(200).json(lists)
+	})
+}
+
+const getSingle = async (req, res) => {
+	const userName = req.params.userName
+	const result = await mongodb.getDb().db().collection("Users").find({user: userName})
+	result.toArray().then((lists) => {
+		res.setHeader("Content-Type", "application/json")
+		res.status(200).json(lists[0])
+	})
+}
+
+const addUser =async(req, res) =>{
+	// const errors = validationResult(req)
+	// if (!errors.isEmpty()) {
+	// 	return res.status(400).json({ errors: errors.array() });
+	//   }
+
+	const User = {
+		userName: req.body.userName,
+        email: req.body.email,
+        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthDate: req.body.birthDate
+	  };
+	  const response = await mongodb.getDb().db().collection('Users').insertOne(User);
+	  if (response.acknowledged) {
+		res.status(201).json(response);
+	  } else {
+		res.status(500).json(response.error || 'Some error occurred while creating the contact.');
+	  }
+	};
+
+const updateUser =async(req, res) =>{
+	const errors = validationResult(req)
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	  }
+	const userId = new ObjectId(req.params.id);
+	const User = {
+		name: req.body.name,
+		calories: req.body.calories,
+		timeToMake: req.body.timeToMake,
+		size: req.body.size,
+	  };
+	const response = await mongodb
+	  .getDb()
+	  .db()
+	  .collection('Users')
+	  .replaceOne({ _id: userId }, User);
+	console.log(response);
+	if (response.modifiedCount > 0) {
+	  res.status(204).send();
+	} else {
+	  res.status(500).json(response.error || 'Some error occurred while updating the workout.');
+	}
+  };
+
+const deleteUser =async(req, res) => {
+	const userId = new ObjectId(req.params.id);
+	const response = await mongodb.getDb().db().collection('Users').remove({ _id: userId }, true);
+	console.log(response);
+	if (response.deletedCount > 0) {
+	  res.status(200).send();
+	} else {
+	  res.status(500).json(response.error || 'Some error occurred while deleting the workout.');
+	}
+  };
+
+
+module.exports = {getAll, getSingle, getMultiple, addUser, deleteUser, updateUser}
