@@ -16,9 +16,9 @@ app.use(bodyparser.json())
 
 app.use('/', require('./routes'));
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+// app.get('/', (req, res) => {
+//   res.send('Hello World!')
+// })
 
 // app.post('/upload', (req, res) =>{
 //     // Get the file that was set to our field named "image"

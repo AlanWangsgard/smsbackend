@@ -7,7 +7,7 @@ routes.use(fileUpload());
 
 routes.get('/', controller.getAll)
 
-routes.get('/:userName', controller.getAlljoe)
+routes.get('/:userName', controller.getSingle)
 
 routes.post('/', controller.addpost)
 
