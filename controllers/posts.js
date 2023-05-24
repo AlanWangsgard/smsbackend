@@ -35,10 +35,13 @@ const addpost =async(req, res) =>{
 	//   }
     let currentDate = new Date()
 
+	console.log(req.body)
+
 	const post = {
 		text: req.body.text,
-        user: req.body.user,
-        date: currentDate
+        // user: req.body.user,
+        date: currentDate,
+		image: req.body.image
 	  };
 	  const response = await mongodb.getDb().db().collection('posts').insertOne(post);
 	  if (response.acknowledged) {

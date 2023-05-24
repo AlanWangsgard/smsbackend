@@ -12,7 +12,9 @@ app.use(cors({
   origin: '*'
 }))
 
-app.use(bodyparser.json())
+// app.use(bodyparser.json())
+app.use(bodyparser.json({ limit: '10mb' }));
+app.use(bodyparser.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use('/', require('./routes'));
 

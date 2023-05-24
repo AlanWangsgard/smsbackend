@@ -44,4 +44,6 @@ routes.post('/image', (req, res) =>{
     res.sendStatus(200);
 })
 
+// routes.post('/image2' (req))
+
 module.exports = routes;

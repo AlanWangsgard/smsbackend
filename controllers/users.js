@@ -3,7 +3,7 @@ const ObjectId = require("mongodb").ObjectId
 // const {validationResult} = require("express-validator")
 
 const getAll = async (req, res) => {
-	const result = await mongodb.getDb().db().collection("Users").find()
+	const result = await mongodb.getDb().db().collection("users").find()
 	result.toArray().then((lists) => {
 		res.setHeader("Content-Type", "application/json")
 		res.status(200).json(lists)
@@ -12,28 +12,29 @@ const getAll = async (req, res) => {
 
 const getSingle = async (req, res) => {
 	const userName = req.params.userName
-	const result = await mongodb.getDb().db().collection("Users").find({user: userName})
+	console.log(userName)
+	const result = await mongodb.getDb().db().collection("users").find({userName: userName})
 	result.toArray().then((lists) => {
 		res.setHeader("Content-Type", "application/json")
 		res.status(200).json(lists[0])
 	})
 }
 
-const addUser =async(req, res) =>{
+const addUser = async(req, res) =>{
 	// const errors = validationResult(req)
 	// if (!errors.isEmpty()) {
 	// 	return res.status(400).json({ errors: errors.array() });
 	//   }
 
 	const User = {
-		userName: req.body.userName,
+		userName: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        birthDate: req.body.birthDate
+        // firstName: req.body.firstName,
+        // lastName: req.body.lastName,
+        // birthDate: req.body.birthDate
 	  };
-	  const response = await mongodb.getDb().db().collection('Users').insertOne(User);
+	  const response = await mongodb.getDb().db().collection('users').insertOne(User);
 	  if (response.acknowledged) {
 		res.status(201).json(response);
 	  } else {
@@ -56,7 +57,7 @@ const updateUser =async(req, res) =>{
 	const response = await mongodb
 	  .getDb()
 	  .db()
-	  .collection('Users')
+	  .collection('users')
 	  .replaceOne({ _id: userId }, User);
 	console.log(response);
 	if (response.modifiedCount > 0) {
@@ -68,7 +69,7 @@ const updateUser =async(req, res) =>{
 
 const deleteUser =async(req, res) => {
 	const userId = new ObjectId(req.params.id);
-	const response = await mongodb.getDb().db().collection('Users').remove({ _id: userId }, true);
+	const response = await mongodb.getDb().db().collection('users').remove({ _id: userId }, true);
 	console.log(response);
 	if (response.deletedCount > 0) {
 	  res.status(200).send();
@@ -78,4 +79,4 @@ const deleteUser =async(req, res) => {
   };
 
 
-module.exports = {getAll, getSingle, getMultiple, addUser, deleteUser, updateUser}
+module.exports = {getAll, getSingle, addUser, deleteUser, updateUser}
