@@ -30,9 +30,9 @@ const addUser = async(req, res) =>{
 		userName: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        // firstName: req.body.firstName,
-        // lastName: req.body.lastName,
-        // birthDate: req.body.birthDate
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthDate: req.body.birthDate
 	  };
 	  const response = await mongodb.getDb().db().collection('users').insertOne(User);
 	  if (response.acknowledged) {
