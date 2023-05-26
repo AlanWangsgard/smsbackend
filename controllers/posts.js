@@ -39,7 +39,7 @@ const addpost =async(req, res) =>{
 
 	const post = {
 		text: req.body.text,
-        // user: req.body.user,
+        user: req.body.user,
         date: currentDate,
 		image: req.body.image
 	  };
