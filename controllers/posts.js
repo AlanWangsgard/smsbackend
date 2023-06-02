@@ -3,7 +3,7 @@ const ObjectId = require("mongodb").ObjectId
 // const {validationResult} = require("express-validator")
 
 const getAll = async (req, res) => {
-	const result = await mongodb.getDb().db().collection("posts").find()
+	const result = await mongodb.getDb().db().collection("posts").find().sort({"date": -1})
 	result.toArray().then((lists) => {
 		res.setHeader("Content-Type", "application/json")
 		res.status(200).json(lists)
@@ -19,12 +19,13 @@ const getMultiple = async (req, res) => {
 	})
 }
 
-const getSingle = async (req, res) => {
+const getUserPosts = async (req, res) => {
 	const userName = req.params.userName
-	const result = await mongodb.getDb().db().collection("posts").find({user: "joe"})
+	console.log('username', userName)
+	const result = await mongodb.getDb().db().collection("posts").find({user: userName}).sort({"date": -1})
 	result.toArray().then((lists) => {
 		res.setHeader("Content-Type", "application/json")
-		res.status(200).json(lists[0])
+		res.status(200).json(lists)
 	})
 }
 
@@ -77,8 +78,9 @@ const updatepost =async(req, res) =>{
   };
 
 const deletepost =async(req, res) => {
-	const userId = new ObjectId(req.params.id);
-	const response = await mongodb.getDb().db().collection('posts').remove({ _id: userId }, true);
+	const id = new ObjectId(req.params.id);
+	console.log(id)
+	const response = await mongodb.getDb().db().collection('posts').deleteOne({ _id: id }, true);
 	console.log(response);
 	if (response.deletedCount > 0) {
 	  res.status(200).send();
@@ -88,4 +90,4 @@ const deletepost =async(req, res) => {
   };
 
 
-module.exports = {getAll, getSingle, getMultiple, addpost, deletepost, updatepost}
+module.exports = {getAll, getUserPosts, getMultiple, addpost, deletepost, updatepost}

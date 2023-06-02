@@ -7,7 +7,7 @@ routes.use(fileUpload());
 
 routes.get('/', controller.getAll)
 
-routes.get('/:userName', controller.getSingle)
+routes.get('/:userName', controller.getUserPosts)
 
 routes.post('/', controller.addpost)
 
@@ -43,7 +43,7 @@ routes.post('/image', (req, res) =>{
 
     res.sendStatus(200);
 })
-
+routes.delete('/:id', controller.deletepost)
 // routes.post('/image2' (req))
 
 module.exports = routes;
