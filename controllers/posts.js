@@ -10,6 +10,16 @@ const getAll = async (req, res) => {
 	})
 }
 
+const getById = async (req, res) => {
+	const id = new ObjectId(req.params.id)
+	console.log('id', id)
+	const result = await mongodb.getDb().db().collection("posts").find({_id: id})
+	result.toArray().then((lists) => {
+		res.setHeader("Content-Type", "application/json")
+		res.status(200).json(lists)
+	})
+}
+
 const getMultiple = async (req, res) => {
     req.params.userName
 	const result = await mongodb.getDb().db().collection("posts").find({user: req.params.userName})
@@ -53,22 +63,16 @@ const addpost =async(req, res) =>{
 	};
 
 const updatepost =async(req, res) =>{
-	const errors = validationResult(req)
-	if (!errors.isEmpty()) {
-		return res.status(400).json({ errors: errors.array() });
-	  }
-	const userId = new ObjectId(req.params.id);
-	const post = {
-		name: req.body.name,
-		calories: req.body.calories,
-		timeToMake: req.body.timeToMake,
-		size: req.body.size,
-	  };
+	// const errors = validationResult(req)
+	// if (!errors.isEmpty()) {
+	// 	return res.status(400).json({ errors: errors.array() });
+	//   }
+	const id = new ObjectId(req.params.id);
 	const response = await mongodb
 	  .getDb()
 	  .db()
 	  .collection('posts')
-	  .replaceOne({ _id: userId }, post);
+	  .updateOne({_id: id}, {$set:{text: req.body.text}})
 	console.log(response);
 	if (response.modifiedCount > 0) {
 	  res.status(204).send();
@@ -90,4 +94,4 @@ const deletepost =async(req, res) => {
   };
 
 
-module.exports = {getAll, getUserPosts, getMultiple, addpost, deletepost, updatepost}
+module.exports = {getAll, getById, getUserPosts, getMultiple, addpost, deletepost, updatepost}

@@ -9,6 +9,8 @@ routes.get('/', controller.getAll)
 
 routes.get('/:userName', controller.getUserPosts)
 
+routes.get('/byId/:id', controller.getById)
+
 routes.post('/', controller.addpost)
 
 routes.post('/image', (req, res) =>{
@@ -45,5 +47,6 @@ routes.post('/image', (req, res) =>{
 })
 routes.delete('/:id', controller.deletepost)
 // routes.post('/image2' (req))
+routes.put('/:id', controller.updatepost)
 
 module.exports = routes;
