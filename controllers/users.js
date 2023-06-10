@@ -43,22 +43,25 @@ const addUser = async(req, res) =>{
 	};
 
 const updateUser =async(req, res) =>{
-	const errors = validationResult(req)
-	if (!errors.isEmpty()) {
-		return res.status(400).json({ errors: errors.array() });
-	  }
-	const userId = new ObjectId(req.params.id);
+	// const errors = validationResult(req)
+	// if (!errors.isEmpty()) {
+	// 	return res.status(400).json({ errors: errors.array() });
+	//   }
+	const userId = req.body.username;
 	const User = {
-		name: req.body.name,
-		calories: req.body.calories,
-		timeToMake: req.body.timeToMake,
-		size: req.body.size,
+		userName: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthDate: req.body.birthDate
 	  };
+	  console.log(userId)
 	const response = await mongodb
 	  .getDb()
 	  .db()
 	  .collection('users')
-	  .replaceOne({ _id: userId }, User);
+	  .replaceOne({ userName: userId }, User);
 	console.log(response);
 	if (response.modifiedCount > 0) {
 	  res.status(204).send();
