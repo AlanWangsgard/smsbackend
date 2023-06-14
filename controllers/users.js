@@ -32,7 +32,8 @@ const addUser = async(req, res) =>{
         password: req.body.password,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        birthDate: req.body.birthDate
+        birthDate: req.body.birthDate,
+		following: []
 	  };
 	  const response = await mongodb.getDb().db().collection('users').insertOne(User);
 	  if (response.acknowledged) {
@@ -48,20 +49,31 @@ const updateUser =async(req, res) =>{
 	// 	return res.status(400).json({ errors: errors.array() });
 	//   }
 	const userId = req.body.username;
-	const User = {
-		userName: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        birthDate: req.body.birthDate
-	  };
-	  console.log(userId)
 	const response = await mongodb
 	  .getDb()
 	  .db()
 	  .collection('users')
-	  .replaceOne({ userName: userId }, User);
+	  .updateOne({ userName: userId }, {$set:{userName: req.body.username, email: req.body.email, password: req.body.password, firstName: req.body.firstName, lastName: req.body.lastName, birthDate: req.body.birthDate}});
+	console.log(response);
+	if (response.modifiedCount > 0) {
+	  res.status(204).send();
+	} else {
+	  res.status(500).json(response.error || 'Some error occurred while updating the workout.');
+	}
+  };
+
+  const updateFollow =async(req, res) =>{
+	// const errors = validationResult(req)
+	// if (!errors.isEmpty()) {
+	// 	return res.status(400).json({ errors: errors.array() });
+	//   }
+	const userId = req.params.userName
+	console.log(req.body.follow)
+	const response = await mongodb
+	  .getDb()
+	  .db()
+	  .collection('users')
+	  .updateOne({ userName: userId }, {$set:{following: req.body.follow}});
 	console.log(response);
 	if (response.modifiedCount > 0) {
 	  res.status(204).send();
@@ -82,4 +94,4 @@ const deleteUser =async(req, res) => {
   };
 
 
-module.exports = {getAll, getSingle, addUser, deleteUser, updateUser}
+module.exports = {getAll, getSingle, addUser, deleteUser, updateUser, updateFollow}

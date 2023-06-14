@@ -7,6 +7,8 @@ routes.use(fileUpload());
 
 routes.get('/', controller.getAll)
 
+routes.get('/fyp/:following', controller.getFyp)
+
 routes.get('/:userName', controller.getUserPosts)
 
 routes.get('/byId/:id', controller.getById)

@@ -13,6 +13,8 @@ routes.post('/', controller.addUser)
 
 routes.put('/:userName', controller.updateUser)
 
+routes.put('/follow/:userName', controller.updateFollow)
+
 routes.delete('/:userName', controller.deleteUser)
 
 module.exports = routes;

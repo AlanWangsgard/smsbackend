@@ -10,6 +10,15 @@ const getAll = async (req, res) => {
 	})
 }
 
+const getFyp = async (req, res) => {
+	console.log(req.params.following.split(','))
+	const result = await mongodb.getDb().db().collection("posts").find({user: {$in: req.params.following.split(',')}}).sort({"date": -1})
+	result.toArray().then((lists) => {
+		res.setHeader("Content-Type", "application/json")
+		res.status(200).json(lists)
+	})
+}
+
 const getById = async (req, res) => {
 	const id = new ObjectId(req.params.id)
 	console.log('id', id)
@@ -73,7 +82,7 @@ const updatepost =async(req, res) =>{
 	  .db()
 	  .collection('posts')
 	  .updateOne({_id: id}, {$set:{text: req.body.text}})
-	console.log(response);
+	// console.log(response);
 	if (response.modifiedCount > 0) {
 	  res.status(204).send();
 	} else {
@@ -94,4 +103,4 @@ const deletepost =async(req, res) => {
   };
 
 
-module.exports = {getAll, getById, getUserPosts, getMultiple, addpost, deletepost, updatepost}
+module.exports = {getAll, getById, getUserPosts, getMultiple, addpost, deletepost, updatepost, getFyp}
