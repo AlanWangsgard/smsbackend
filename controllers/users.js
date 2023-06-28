@@ -20,6 +20,16 @@ const getSingle = async (req, res) => {
 	})
 }
 
+const getPattern = async (req, res) =>{
+	const pattern = req.params.pattern
+	console.log(pattern)
+	const result = await mongodb.getDb().db().collection("users").find({userName: {$regex: pattern, $options: 'i'}})
+	result.toArray().then((lists) => {
+		res.setHeader("Content-Type", "application/json")
+		res.status(200).json(lists)
+	})
+}
+
 const addUser = async(req, res) =>{
 	// const errors = validationResult(req)
 	// if (!errors.isEmpty()) {
@@ -94,4 +104,4 @@ const deleteUser =async(req, res) => {
   };
 
 
-module.exports = {getAll, getSingle, addUser, deleteUser, updateUser, updateFollow}
+module.exports = {getAll, getSingle, addUser, deleteUser, updateUser, updateFollow, getPattern}

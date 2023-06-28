@@ -9,6 +9,8 @@ routes.get('/', controller.getAll)
 
 routes.get('/:userName', controller.getSingle)
 
+routes.get('/search/:pattern', controller.getPattern)
+
 routes.post('/', controller.addUser)
 
 routes.put('/:userName', controller.updateUser)
