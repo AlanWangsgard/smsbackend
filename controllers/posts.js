@@ -55,12 +55,10 @@ const addpost =async(req, res) =>{
 	//   }
     let currentDate = new Date()
 
-	console.log(req.body)
-
 	const post = {
 		text: req.body.text,
         user: req.body.user,
-        date: currentDate,
+        date: `${currentDate.getMonth()}/${currentDate.getDate()}/${currentDate.getFullYear()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`,
 		image: req.body.image
 	  };
 	  const response = await mongodb.getDb().db().collection('posts').insertOne(post);
