@@ -1,6 +1,6 @@
 const mongodb = require("../databases/connect")
 const ObjectId = require("mongodb").ObjectId
-// const {validationResult} = require("express-validator")
+const {validationResult} = require("express-validator")
 
 const getAll = async (req, res) => {
 	const result = await mongodb.getDb().db().collection("users").find()
@@ -31,13 +31,13 @@ const getPattern = async (req, res) =>{
 }
 
 const addUser = async(req, res) =>{
-	// const errors = validationResult(req)
-	// if (!errors.isEmpty()) {
-	// 	return res.status(400).json({ errors: errors.array() });
-	//   }
-
+	const errors = validationResult(req)
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	  }
+	if(req.body){
 	const User = {
-		userName: req.body.username,
+		userName: req.body.userName,
         email: req.body.email,
         password: req.body.password,
         firstName: req.body.firstName,
@@ -51,13 +51,15 @@ const addUser = async(req, res) =>{
 	  } else {
 		res.status(500).json(response.error || 'Some error occurred while creating the contact.');
 	  }
-	};
+	}else {
+		res.status(500).json(response.error || 'fill out the fields');
+	}};
 
 const updateUser =async(req, res) =>{
-	// const errors = validationResult(req)
-	// if (!errors.isEmpty()) {
-	// 	return res.status(400).json({ errors: errors.array() });
-	//   }
+	const errors = validationResult(req)
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	  }
 	const userId = req.body.username;
 	const response = await mongodb
 	  .getDb()
